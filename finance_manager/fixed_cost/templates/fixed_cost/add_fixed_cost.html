@@ -1,0 +1,105 @@
+{% comment %} <h1>Add Fixed cost</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send</button>
+</form> {% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Selection Form</title>
+    <style>
+        .all{
+            display:flex !important;
+            flex-direction: column !important;
+            justify-content: left !important;
+            
+        }
+    </style>
+</head>
+<body>
+    <div class='all'>
+        <h2>Select a Date</h2>
+        <form method="POST">
+        {% csrf_token %}
+
+        <label for="title", name="title">title:</label>
+        <input type="text" id="title" name="title">
+
+        <label for="amount", name="amount">amount:</label>
+        <input type="number" name="amount">
+
+        <label for="schedule">Choose Date:</label>
+        <select id="schedule" name="schedule">
+            <option value="yearly">yearly</option>
+            <option value="monthly" selected="selected">monthly</option>
+            <option value="weekly">weekly</option>
+            <option value="daily">daily</option>
+            <option value="custom">custom</option>
+            
+        </select>
+
+        <!-- Custom date field, hidden by default -->
+        <div id="custom-schedule-container" style="display: none; margin-top: 10px;">
+            <label for="id_custom_schedule">Enter Custom Date:</label>
+            <input type="date" id="id_custom_schedule" name="custom_schedule">
+        </div>
+
+        <label for="deadline">deadline</label>
+        <input type="radio" id="id_permanantly" value="permanantly" name="deadline">
+        <label for="permanantly">permanantly</label>
+
+        <input type="radio" id="id_custom" value="custom" name="deadline" >
+        <label for="custom">custom</label>
+
+        <div id="custom-deadline-container" style="display: none; margin-top: 10px;">
+            <label for="deadline_custom">Enter Custom Date:</label>
+            <input type="date" id="deadline_custom" name="custom_deadline">
+        </div>
+        
+        <button type="submit" style="margin-top: 15px;">Submit</button>
+        </form>
+        </div>
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Handling first date choice
+            const dateChoiceField1 = document.getElementById('schedule');
+            const customDateContainer1 = document.getElementById('custom-schedule-container');
+
+            if (dateChoiceField1.value === 'custom') {
+                customDateContainer1.style.display = 'block';
+            }
+
+            dateChoiceField1.addEventListener('change', function () {
+                if (this.value === 'custom') {
+                    customDateContainer1.style.display = 'block';
+                } else {
+                    customDateContainer1.style.display = 'none';
+                }
+            });
+
+            // Handling second date choice
+            const dateOptionCustom = document.getElementById('id_custom');
+            const customDateContainer2 = document.getElementById('custom-deadline-container');
+
+            // Check if the custom radio button is selected initially
+            if (dateOptionCustom.checked) {
+                customDateContainer2.style.display = 'block';
+            }
+
+            // Add event listeners to all radio buttons in the group
+            document.getElementsByName('deadline').forEach(radio => {
+                radio.addEventListener('change', function () {
+                    if (dateOptionCustom.checked) {
+                        customDateContainer2.style.display = 'block';
+                    } else {
+                        customDateContainer2.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<h1>Income list</h1>
+<a href="{% url 'add_income' %}">add new incomes</a>
+<ul>
+    {% for income in incomes %}
+    <li>+{{income.amount}} on {{income.date}} - {{income.description}}
+    {% endfor %}
+</ul>

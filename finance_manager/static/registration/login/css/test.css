@@ -1,0 +1,8 @@
+/* -------------------------------------------------
+[Errors] */
+.errors{
+    color: red;
+    background-color: rgb(255, 170, 170);
+    padding: 10px 30px;
+  }
+  

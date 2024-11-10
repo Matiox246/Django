@@ -1,0 +1,7 @@
+<h1>Fixed costs list</h1>
+<a href="{% url 'add' %}">Add new fixed cost</a>
+<ul>
+    {% for fixed_cost in fixed_costs %}
+    <li>{{fixed_cost.title}} on {{fixed_cost.amount}} - {{fixed_cost.ScheduleOption}}
+    {% endfor %}
+</ul>
