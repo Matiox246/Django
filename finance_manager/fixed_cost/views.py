@@ -14,9 +14,8 @@ def fixed_costs_list(request):
 def add_fixed_cost(request):
     if request.method == "POST":
         form = FixedCostForm(request.POST)
-        print(form.errors)
+        # print(form.errors)
         if form.is_valid():
-            print("form is valid")
             form.save()
             schedule_choice = form.cleaned_data['schedule']
             custom_schedule = form.cleaned_data['custom_schedule'] if schedule_choice == 'custom' else None

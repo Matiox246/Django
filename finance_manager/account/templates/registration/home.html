@@ -1,4 +1,7 @@
 {% extends "registration/base.html" %}
-my home
 
-<p>{{user}}</p>
+{% block title %}My Account{% endblock title %}
+{% block main %}
+WELCOME {{user}}
+{% endblock main %}
+
