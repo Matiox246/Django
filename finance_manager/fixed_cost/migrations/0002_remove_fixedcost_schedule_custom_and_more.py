@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='fixedcost',
-            name='custom_schedule',
+            name='schedule_custom',
             field=models.CharField(max_length=100, null=True, verbose_name='chedule_custom'),
         ),
         migrations.AlterField(

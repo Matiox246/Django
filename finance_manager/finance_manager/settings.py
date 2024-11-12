@@ -48,7 +48,9 @@ INSTALLED_APPS = [
     'expenses.apps.ExpensesConfig',
     'fixed_cost.apps.FixedCostsConfig',
     'account.apps.AccountConfig',
-    'widget_tweaks'
+    'widget_tweaks',
+    'contact.apps.ContactConfig'
+
 ]
 
 MIDDLEWARE = [

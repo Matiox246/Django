@@ -20,7 +20,7 @@ class FixedCost(models.Model):
         
     }
     schedule = models.CharField("schedule", choices=SCHEDULES, max_length=50, default=MONTHLY)
-    custom_schedule = models.DateField("chedule_custom", auto_now=False, auto_now_add=False, blank=True , null=True)
+    custom_schedule = models.DateField("custom_schedule", auto_now=False, auto_now_add=False, blank=True , null=True)
 
     PERMANANTLY = "permanantly"
     CUSTOM = "custom"
@@ -29,12 +29,12 @@ class FixedCost(models.Model):
         CUSTOM : "custom"
     }
     deadline = models.CharField("deadline",max_length=50, choices=DEADLINE, default=PERMANANTLY)
-    custom_deadline = models.DateField("deadline_custom", auto_now=False, auto_now_add=False, blank=True, null=True)
+    custom_deadline = models.DateField("custom_deadline", auto_now=False, auto_now_add=False, blank=True, null=True)
     
 
     def __str__(self):
         if self.schedule == 'custom':
-            return f"Custom schedule is {self.schedule_custom}"
+            return f"Custom schedule is {self.custom_schedule}"
         else:
             return self.title
         

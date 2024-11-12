@@ -3,5 +3,11 @@
 {% block title %}My Account{% endblock title %}
 {% block main %}
 WELCOME {{user}}
-{% endblock main %}
+{% for income in incomes %}
+<ul>
+    <li>{{income.amount}}, {{income.date}}, {{income.category}}</li>
+</ul>
+{% endfor %}
 
+
+{% endblock main %}
