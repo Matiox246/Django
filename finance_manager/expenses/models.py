@@ -8,7 +8,7 @@ class Income(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.CharField(max_length=255)
     category = models.ForeignKey("Category", verbose_name="Category", related_name="Income", on_delete=models.CASCADE, null=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL,null=True, default=User)
 
     def __str__(self):
         return f"+{self.amount} on {self.date}"

@@ -3,7 +3,7 @@ from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, DeleteView
+from django.views.generic import ListView
 from django .contrib.auth.models import User
 from expenses.models import Income
 
@@ -31,3 +31,5 @@ class IncomeList(LoginRequiredMixin, ListView):
             return Income.objects.all()
         else:
             return Income.objects.filter(user=self.request.user)
+        
+

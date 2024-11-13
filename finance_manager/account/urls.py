@@ -38,5 +38,5 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('', IncomeList.as_view(), name='home')
+    path('', IncomeList.as_view(), name='home'),
 ]

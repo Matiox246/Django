@@ -1,7 +1,69 @@
-<h1>Income list</h1>
-<a href="{% url 'add_income' %}">add new incomes</a>
-<ul>
-    {% for income in incomes %}
-    <li>+{{income.amount}} on {{income.date}} - {{income.description}}
-    {% endfor %}
-</ul>
+{% extends "registration/base.html" %}
+{% load static %}
+{% block title %}
+<a href="{%url 'add_income' %}"><h3>ADD INCOME</h3></a>
+{% endblock title %}
+{% block main %}
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>Incomes</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	<link rel="stylesheet" href="{% static 'registration/incomes_table/css/style.css' %}">
+
+	</head>
+	<body>
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">Incomes</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="table-wrap">
+						<table class="table">
+						  <thead class="thead-primary">
+						    <tr>
+						      <th>#</th>
+						      <th>First Name</th>
+						      <th>Last Name</th>
+						      <th>Email Address</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						    {% for income in incomes %}
+                            <tr>
+                                <th scope="row">{{income.amount}}$</th>
+                                <td>{{income.category}}</td>
+                                <td>{{income.date}}</td>
+                                <td>{{income.user.email}}</td>
+                              </tr>
+                            {% endfor %}
+						  </tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="{% static 'registration/incomes_table/js/jquery.min.js' %}"></script>
+  <script src="{% static 'registration/incomes_table/js/popper.js' %}"></script>
+  <script src="{% static 'registration/incomes_table/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'registration/incomes_table/js/main.js' %}"></script>
+
+  <script src="https://kit.fontawesome.com/cab1fd28d4.js" crossorigin="anonymous"></script>
+
+	</body>
+</html>
+
+
+{% endblock main %}
