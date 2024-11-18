@@ -20,7 +20,7 @@ class FixedCost(models.Model):
         
     }
     schedule = models.CharField("schedule", choices=SCHEDULES, max_length=50, default=MONTHLY)
-    custom_schedule = models.DateField("custom_schedule", auto_now=False, auto_now_add=False, blank=True , null=True)
+    
 
     PERMANANTLY = "permanantly"
     CUSTOM = "custom"
@@ -34,7 +34,7 @@ class FixedCost(models.Model):
 
     def __str__(self):
         if self.schedule == 'custom':
-            return f"Custom schedule is {self.custom_schedule}"
+            return f"Custom schedule is {self.schedule}"
         else:
             return self.title
         

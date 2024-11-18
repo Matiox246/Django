@@ -10,15 +10,15 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='fixedcost',
-            name='schedule_custom',
-        ),
-        migrations.AddField(
-            model_name='fixedcost',
-            name='schedule_custom',
-            field=models.CharField(max_length=100, null=True, verbose_name='chedule_custom'),
-        ),
+        # migrations.RemoveField(
+        #     model_name='fixedcost',
+        #     name='schedule_custom',
+        # ),
+        # migrations.AddField(
+        #     model_name='fixedcost',
+        #     name='schedule_custom',
+        #     field=models.CharField(max_length=100, null=True, verbose_name='schedule_custom'),
+        # ),
         migrations.AlterField(
             model_name='fixedcost',
             name='amount',

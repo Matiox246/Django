@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=10, verbose_name='title')),
                 ('amount', models.IntegerField(verbose_name='title')),
                 ('schedule', models.CharField(max_length=50)),
-                ('schedule_custom ', models.CharField(blank=True, max_length=100, null=True, verbose_name='chedule_custom')),
+                # ('schedule_custom ', models.CharField(blank=True, max_length=100, null=True, verbose_name='schedule_custom')),
                 ('deadline', models.CharField(max_length=50, verbose_name='deadline')),
                 ('deadline_custom', models.DateField(verbose_name='deadline')),
             ],

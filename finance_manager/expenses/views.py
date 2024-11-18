@@ -1,42 +1,37 @@
-from django.shortcuts import render, redirect
-from .models import Income, Expense
-from .forms import IncomeForm, ExpenseForm
-from django.views.generic import CreateView
+from django.shortcuts import render
+from django.views.generic import CreateView, ListView
 from django.urls import reverse_lazy
+from django.db.models import Sum
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django.contrib.auth.models import User
+
+
+from .models import Income, Expense
 # Create your views here.
 
-def income_list(request):
-    incomes = Income.objects.all()
-    context = {
-        'incomes':incomes
-    }
-    return render(request, 'expenses/income_list.html', context)
+class ExpenseListView(LoginRequiredMixin, ListView):
+    model = Expense
+    template_name = 'expense/expense_list.html'
+    context_object_name = 'expenses'
 
-def expense_list(request):
-    expenses = Expense.objects.all()
-    return render(request, 'expenses/expense_list.html', {'expenses':expenses})
+class ExpensesCreateView(CreateView):
+    model = Expense
+    fields = ['amount', 'description', 'category']
+    template_name = 'expenses/add_expense.html'
+    success_url = reverse_lazy('expense_list')
 
-
-# def add_income(request):
-#     if request.method == 'POST':
-#         form = IncomeForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#         return redirect('income_list')
-#     else:
-#         form = IncomeForm()
-#     return render(request, 'expenses/add_income.html', {'form':form})
+    def form_valid(self, form):
+        form.instance.user = self.request.user 
+        return super().form_valid(form)
 
 
-def add_expense(request):
-    if request.method == 'POST':
-        form = ExpenseForm(request.POST)
-        if form.is_valid():
-            form.save()
-        return redirect('expense_list')
-    else:
-        form = ExpenseForm()
-    return render(request, 'expenses/add_expense.html', {'form':form})
+class IncomeListView(LoginRequiredMixin, ListView):
+    model = Income
+    template_name = 'expenses/income_list.html'
+    context_object_name = 'incomes'
 
 
 class IncomeCreateView(CreateView):
@@ -46,5 +41,28 @@ class IncomeCreateView(CreateView):
     success_url = reverse_lazy('income_list')
 
     def form_valid(self, form):
-        form.instance.user = self.request.user  # Set the user to the logged-in user
+        form.instance.user = self.request.user
         return super().form_valid(form)
+    
+
+def monthly_expense(request, year=None, month=None):
+    username = request.GET.get('username')
+    if username:
+        user = request.user
+
+    expenses = Expense.objects.filter(user=user)
+
+    if year and month:
+        expenses = Expense.objects.filter(date__year=year, date__month=month)
+        time_period =f"{year}-{month:02d}"
+    else: 
+        time_period = "All Time"
+
+    total_spent = expenses.aaggregate(total=Sum('amount'))['total'] or 0
+
+    context = {
+        'user': user,
+        'time_period': time_period,
+        'total_spent': total_spent
+    }
+    return render(request, 'expense_list.html', context)

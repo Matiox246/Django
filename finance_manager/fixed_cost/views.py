@@ -18,7 +18,7 @@ def add_fixed_cost(request):
         if form.is_valid():
             form.save()
             schedule_choice = form.cleaned_data['schedule']
-            custom_schedule = form.cleaned_data['custom_schedule'] if schedule_choice == 'custom' else None
+            # schedule_custom = form.cleaned_data['schedule_custom'] if schedule_choice == 'custom' else None
             return redirect('fixed_costs')
     else:
         form = FixedCostForm()

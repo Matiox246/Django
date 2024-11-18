@@ -10,11 +10,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='fixedcost',
-            name='custom_schedule',
-            field=models.DateField(verbose_name='chedule_custom'),
-        ),
+        # migrations.AlterField(
+        #     model_name='fixedcost',
+        #     name='schedule_custom',
+        #     field=models.DateField(verbose_name='chedule_custom'),
+        # ),
         migrations.AlterField(
             model_name='fixedcost',
             name='deadline',

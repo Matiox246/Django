@@ -15,9 +15,9 @@ class Migration(migrations.Migration):
             name='custom_deadline',
             field=models.DateField(null=True, verbose_name='deadline_custom'),
         ),
-        migrations.AlterField(
-            model_name='fixedcost',
-            name='custom_schedule',
-            field=models.DateField(null=True, verbose_name='chedule_custom'),
-        ),
+        # migrations.AlterField(
+        #     model_name='fixedcost',
+        #     name='schedule_custom',
+        #     field=models.DateField(null=True, verbose_name='chedule_custom'),
+        # ),
     ]
