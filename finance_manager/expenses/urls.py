@@ -7,5 +7,5 @@ urlpatterns = [
     path('expenses/<int:year>/<int:month>/', views.monthly_expense, name='monthly_expenses'),
     path('expenses/', ExpenseListView.as_view(), name='expense_list'),
     path('income/add/', IncomeCreateView.as_view(), name='add_income'),
-    path('add_expense/', views.ExpensesCreateView.as_view(), name='add_expense')
+    path('add_expense/', views.ExpensesCreateView.as_view(), name='add_expense'),
 ]

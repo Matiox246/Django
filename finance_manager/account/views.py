@@ -8,7 +8,7 @@ from django .contrib.auth.models import User
 from django.db.models import Sum
 from datetime import date
 
-from expenses.models import Income
+from expenses.models import Income 
 
 # Create your views here.
 
@@ -17,11 +17,9 @@ class IncomeList(LoginRequiredMixin, ListView):
     template_name = 'registration/home.html'
     context_object_name = 'incomes'
 
-    # def get_queryset(self):
-    #     if self.request.user.is_superuser:
-    #         return Income.objects.all()
-    #     else:
-    #         return Income.objects.filter(user=self.request.User)
-        
-
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return Income.objects.all()
+        else:
+            return Income.objects.filter(user=self.request.user)
 

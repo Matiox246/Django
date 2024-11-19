@@ -19,12 +19,12 @@ class ExpenseListView(LoginRequiredMixin, ListView):
 
 class ExpensesCreateView(CreateView):
     model = Expense
-    fields = ['amount', 'description', 'category']
+    fields = ['amount', 'date', 'description', 'category']
     template_name = 'expenses/add_expense.html'
     success_url = reverse_lazy('expense_list')
 
     def form_valid(self, form):
-        form.instance.user = self.request.user 
+        form.instance.user = self.request.user
         return super().form_valid(form)
 
 
@@ -32,6 +32,12 @@ class IncomeListView(LoginRequiredMixin, ListView):
     model = Income
     template_name = 'expenses/income_list.html'
     context_object_name = 'incomes'
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return Income.objects.all()
+        else: 
+            return Income.objects.filter(user=self.request.user)
 
 
 class IncomeCreateView(CreateView):
@@ -48,21 +54,33 @@ class IncomeCreateView(CreateView):
 def monthly_expense(request, year=None, month=None):
     username = request.GET.get('username')
     if username:
-        user = request.user
-
-    expenses = Expense.objects.filter(user=user)
-
-    if year and month:
-        expenses = Expense.objects.filter(date__year=year, date__month=month)
-        time_period =f"{year}-{month:02d}"
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            user = None
     else: 
-        time_period = "All Time"
+        user = request.user if request.user.is_authenticated else None
 
-    total_spent = expenses.aaggregate(total=Sum('amount'))['total'] or 0
+    if user:
+        expenses = Expense.objects.filter(user=user)
+
+
+        if year and month:
+            expenses = expenses.filter(date__year=year, date__month=month)
+            time_period =f"{year}-{month:02d}"
+        else: 
+            time_period = "All Time"
+
+        total_spent = expenses.aggregate(total=Sum('amount'))['total'] or 0
+    else:
+        expenses = Expense.objects.none()
+        time_period = "N/A"
+        total_spent = 0
 
     context = {
         'user': user,
         'time_period': time_period,
-        'total_spent': total_spent
+        'total_spent': total_spent,
+        'expenses': expenses
     }
-    return render(request, 'expense_list.html', context)
+    return render(request, 'expenses/expense_list.html', context)
