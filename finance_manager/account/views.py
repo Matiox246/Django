@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
-from django .contrib.auth.models import User
+from account.models import User
 from django.db.models import Sum
 from datetime import date
 

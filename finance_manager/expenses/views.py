@@ -6,7 +6,7 @@ from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from django.contrib.auth.models import User
+from account.models import User
 
 
 from .models import Income, Expense
@@ -50,7 +50,7 @@ class IncomeCreateView(CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
     
-
+@login_required
 def monthly_expense(request, year=None, month=None):
     username = request.GET.get('username')
     if username:
@@ -68,14 +68,10 @@ def monthly_expense(request, year=None, month=None):
         if year and month:
             expenses = expenses.filter(date__year=year, date__month=month)
             time_period =f"{year}-{month:02d}"
-        else: 
+        if not year and month: 
             time_period = "All Time"
 
         total_spent = expenses.aggregate(total=Sum('amount'))['total'] or 0
-    else:
-        expenses = Expense.objects.none()
-        time_period = "N/A"
-        total_spent = 0
 
     context = {
         'user': user,
