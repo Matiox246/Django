@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import CreateView, ListView
 from django.urls import reverse_lazy
 from django.db.models import Sum
+from .mixins import FieldMixin
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -17,9 +18,8 @@ class ExpenseListView(LoginRequiredMixin, ListView):
     template_name = 'expense/expense_list.html'
     context_object_name = 'expenses'
 
-class ExpensesCreateView(CreateView):
+class ExpensesCreateView(LoginRequiredMixin, FieldMixin, CreateView):
     model = Expense
-    fields = ['amount', 'date', 'description', 'category']
     template_name = 'expenses/add_expense.html'
     success_url = reverse_lazy('expense_list')
 
@@ -63,12 +63,12 @@ def monthly_expense(request, year=None, month=None):
 
     if user:
         expenses = Expense.objects.filter(user=user)
-
+        time_period = "All time"
 
         if year and month:
             expenses = expenses.filter(date__year=year, date__month=month)
             time_period =f"{year}-{month:02d}"
-        if not year and month: 
+        else: 
             time_period = "All Time"
 
         total_spent = expenses.aggregate(total=Sum('amount'))['total'] or 0
