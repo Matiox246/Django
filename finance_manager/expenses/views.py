@@ -10,13 +10,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from account.models import User
 
 
-from .models import Income, Expense
+from .models import Income, Expense, GoalIncome
 # Create your views here.
 
-class ExpenseListView(LoginRequiredMixin, ListView):
-    model = Expense
-    template_name = 'expense/expense_list.html'
-    context_object_name = 'expenses'
+# class ExpenseListView(LoginRequiredMixin, ListView):
+#     model = Expense
+#     template_name = 'expense/expense_list.html'
+#     context_object_name = 'expenses'
 
 class ExpensesCreateView(LoginRequiredMixin, FieldMixin, CreateView):
     model = Expense
@@ -28,22 +28,26 @@ class ExpensesCreateView(LoginRequiredMixin, FieldMixin, CreateView):
         return super().form_valid(form)
 
 
-class IncomeListView(LoginRequiredMixin, ListView):
-    model = Income
-    template_name = 'expenses/income_list.html'
-    context_object_name = 'incomes'
+# class IncomeListView(LoginRequiredMixin, ListView):
+#     model = Income
+#     template_name = 'expenses/income_list.html'
+#     context_object_name = 'incomes'
 
-    def get_queryset(self):
-        if self.request.user.is_superuser:
-            return Income.objects.all()
-        else: 
-            return Income.objects.filter(user=self.request.user)
-
-
-class IncomeCreateView(CreateView):
+class IncomeCreateView(LoginRequiredMixin, FieldMixin ,CreateView):
     model = Income
     fields = ['amount', 'description', 'category']
     template_name = 'expenses/add_income.html'
+    success_url = reverse_lazy('income_list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+    
+
+class GoalIncomeCreateView(CreateView):
+    model = GoalIncome
+    fields = ['amount']
+    template_name = 'expenses/set_goal.html'
     success_url = reverse_lazy('income_list')
 
     def form_valid(self, form):
@@ -68,7 +72,7 @@ def monthly_expense(request, year=None, month=None):
         if year and month:
             expenses = expenses.filter(date__year=year, date__month=month)
             time_period =f"{year}-{month:02d}"
-        else: 
+        else:
             time_period = "All Time"
 
         total_spent = expenses.aggregate(total=Sum('amount'))['total'] or 0
@@ -77,6 +81,37 @@ def monthly_expense(request, year=None, month=None):
         'user': user,
         'time_period': time_period,
         'total_spent': total_spent,
-        'expenses': expenses
+        'expenses': expenses,
     }
     return render(request, 'expenses/expense_list.html', context)
+
+
+@login_required
+def monthly_incomes(request, year=None, month=None):
+    username = request.GET.get('username')
+    if username:
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            user = None
+    else: 
+        user = request.user if request.user.is_authenticated else None
+
+    if user:
+        incomes = Income.objects.filter(user=user)
+        time_period = "All time"
+        if year and month:
+            incomes = incomes.filter(date__year=year, date__month=month)
+            time_period =f"{year}-{month:02d}"
+        elif not year or month:
+            time_period = "All time"
+
+        total_spent = incomes.aggregate(total=Sum('amount'))['total'] or 0
+
+    context = {
+        'user': user,
+        'time_period': time_period,
+        'total_spent': total_spent,
+        'incomes': incomes,
+    }
+    return render(request, 'expenses/income_list.html', context)

@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     'fixed_cost.apps.FixedCostsConfig',
     'account.apps.AccountConfig',
     'widget_tweaks',
-    'contact.apps.ContactConfig'
+    'contact.apps.ContactConfig',
+    'crispy_forms',
+    "crispy_bootstrap4",
 
 ]
 
@@ -137,3 +139,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'account.User'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"

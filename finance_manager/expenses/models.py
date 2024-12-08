@@ -32,4 +32,16 @@ class Category(models.Model):
     def  __str__(self):
         return self.title
 
-    
+
+class income_goal(models.Model):
+    count = models.IntegerField("count")
+
+    def __str__(self):
+        return self.count
+
+
+class GoalIncome(models.Model):
+    amount = models.IntegerField("count")
+
+    def __str__(self):
+        return self.count

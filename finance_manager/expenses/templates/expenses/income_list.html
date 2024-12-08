@@ -1,7 +1,7 @@
 {% extends "registration/base.html" %}
 {% load static %}
 {% block title %}
-<a href="{%url 'add_income' %}"><h3>ADD INCOME</h3></a>
+
 {% endblock title %}
 {% block main %}
 <!doctype html>
@@ -16,9 +16,25 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	
 	<link rel="stylesheet" href="{% static 'registration/incomes_table/css/style.css' %}">
-
 	</head>
 	<body>
+		<div style="display: flex; justify-content:space-between; flex-direction: row-reverse;">
+			<a href="{%url 'add_income' %}"><button>ADD INCOME</button></a>
+			<div style="display:flex; gap:8px;">
+				<form id="date-filter-form">
+				<label for="date">filter month</label>
+				<input type="month" id="date-picker" name="date">
+				<button type="button" onclick="redirectToExpenses()">Filter</button>
+				</form>
+				<a href="{% url 'income_list' %}"><button>Remove filters</button></a>
+			</div>
+		</div>
+		<div>
+			<h3>Total spent:<span> {{total_spent}}$</span></h3>
+			<h3>Time period:<span> {{time_period}}</span></h3>
+			<a href="{% url 'income_goal'%}"><button>edit</button></a>
+
+		</div>
 	<section class="ftco-section">
 		<div class="container">
 			<div class="row justify-content-center">
@@ -62,7 +78,18 @@
 
   <script src="https://kit.fontawesome.com/cab1fd28d4.js" crossorigin="anonymous"></script>
 
-	</body>
+  <script>
+    function redirectToExpenses() {
+        const datePicker = document.getElementById('date-picker');
+        const selectedDate = datePicker.value; // Format: "YYYY-MM"
+        if (selectedDate) {
+            const [year, month] = selectedDate.split('-');
+            const url = `/incomes/${year}/${month}/`;
+            window.location.href = url; // Redirect to the new URL
+        }
+    }
+</script>
+</body>
 </html>
 
 

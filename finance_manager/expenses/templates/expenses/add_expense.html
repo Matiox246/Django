@@ -1,11 +1,16 @@
+{% extends "registration/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
 <h1>Add expense</h1>
+{% endblock title %}
+
+{% block main %}
+
 <form method="POST">
     {% csrf_token %}
-    {{form.amount}}
-    {% if user.is_superuser %}
-    {{form.date}}
-    {% endif %}
-    {{form.description}}
-    {{form.category}}
-    
+    {{form|crispy}}
+    <button type="submit">SEND</button>
 </form>
+
+{% endblock main %}
