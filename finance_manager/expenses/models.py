@@ -33,15 +33,19 @@ class Category(models.Model):
         return self.title
 
 
+
+
 class income_goal(models.Model):
-    count = models.IntegerField("count")
+    amount = models.IntegerField("amount")
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return self.count
+        return f"{self.amount} for user {self.user}"
+    
 
-
-class GoalIncome(models.Model):
-    amount = models.IntegerField("count")
+class expense_goal(models.Model):
+    amount = models.IntegerField("amount")
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return self.count
+        return f"{self.amount} for user {self.user}"

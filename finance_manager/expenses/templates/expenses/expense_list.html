@@ -9,11 +9,15 @@
 <div style="display:flex; gap:8px;">
   <form id="date-filter-form">
     <label for="date">filter month</label>
-    <input type="month" id="date-picker" name="date" columns={6}>
+    <input type="month" id="date-picker" name="date">
     <button type="button" onclick="redirectToExpenses()">Filter</button>
       
   </form>
   <a href="{% url 'expense_list' %}"><button>Remove filters</button></a>
+  <!--------------------------progress bar-------------------------------->
+  <progress value="{{percentage_spent}}" max="100" style="--value: {{percentage_spent}}; --max: 100;"></progress>
+  <h1>{{percentage_spent}}</h1>
+  <!------------------------end progress bar------------------------------>
 </div>
 <!--cute add expense button-->
 <div class="chick-btn">
@@ -158,7 +162,7 @@
   <script src="https://kit.fontawesome.com/cab1fd28d4.js" crossorigin="anonymous"></script>
   {% comment %} filter month js {% endcomment %}
   <script>
-    function redirectToExpenses() {
+    function redirectToExpenses(){
         const datePicker = document.getElementById('date-picker');
         const selectedDate = datePicker.value; // Format: "YYYY-MM"
         if (selectedDate) {

@@ -1,11 +1,12 @@
 from django.contrib import admin
-from .models import Expense, Income, Category
+from .models import Expense, Income, Category, expense_goal
 
 # Register your models here.
 
 admin.site.register(Expense)
 # admin.site.register(Income)
 admin.site.register(Category)
+admin.site.register(expense_goal)
 
 class IncomeAdmin(admin.ModelAdmin):
     list_display = ('user', 'amount', 'category', 'date') 

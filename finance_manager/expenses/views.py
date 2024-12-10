@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from account.models import User
 
 
-from .models import Income, Expense, GoalIncome
+from .models import Income, Expense, expense_goal, income_goal
 # Create your views here.
 
 # class ExpenseListView(LoginRequiredMixin, ListView):
@@ -44,16 +44,7 @@ class IncomeCreateView(LoginRequiredMixin, FieldMixin ,CreateView):
         return super().form_valid(form)
     
 
-class GoalIncomeCreateView(CreateView):
-    model = GoalIncome
-    fields = ['amount']
-    template_name = 'expenses/set_goal.html'
-    success_url = reverse_lazy('income_list')
 
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
-    
 @login_required
 def monthly_expense(request, year=None, month=None):
     username = request.GET.get('username')
@@ -76,12 +67,22 @@ def monthly_expense(request, year=None, month=None):
             time_period = "All Time"
 
         total_spent = expenses.aggregate(total=Sum('amount'))['total'] or 0
+        value = expense_goal.objects.filter(user=user).first() 
+        if value: 
+            goal_value = value.amount
+            percentage_spent = round((total_spent / goal_value) * 100)
+            if total_spent >= (goal_value * 80) / 100:
+                print("ALARM: you are close to your monthly budget!")
+        else:
+            print("No expense goal found for this user.")
 
     context = {
         'user': user,
         'time_period': time_period,
         'total_spent': total_spent,
         'expenses': expenses,
+        'goal_value': goal_value,
+        'percentage_spent': percentage_spent,
     }
     return render(request, 'expenses/expense_list.html', context)
 
@@ -107,11 +108,15 @@ def monthly_incomes(request, year=None, month=None):
             time_period = "All time"
 
         total_spent = incomes.aggregate(total=Sum('amount'))['total'] or 0
+        
 
     context = {
         'user': user,
         'time_period': time_period,
         'total_spent': total_spent,
         'incomes': incomes,
+        
     }
     return render(request, 'expenses/income_list.html', context)
+
+    
