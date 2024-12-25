@@ -1,6 +1,7 @@
 from typing import Any
 from django.db.models.query import QuerySet
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseBadRequest
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, UpdateView, CreateView
@@ -47,16 +48,14 @@ def recent_transacitions(request):
     # sort by date created
     combined_transactions.sort(key=lambda x: x['date'], reverse=True)
 
-    def check_count_of_combined(self, num): # when len of list was shorter than the count i set to display like [:5],
-        # none was showing so we use this func to prevent from none desplaying
-        if len(self) >= num:
-            return self[:num]
-        else:
-            return self
-        
-    last_five = check_count_of_combined(combined_transactions, 5)
-    last_ten = check_count_of_combined(combined_transactions, 10)
-    last_twenty = check_count_of_combined(combined_transactions, 20)
+    count = request.GET.get('count', '5')  # default
+    try:
+        count = int(count)
+    except ValueError:
+        return HttpResponseBadRequest("Invalid count parameter")
+
+    # get limited
+    recent_transactions = combined_transactions[:count]
 
     now = timezone.now()
     current_month = now.month
@@ -96,9 +95,7 @@ def recent_transacitions(request):
     context_saved = get_save_of_month_data(request.user)
 
     context = {
-        'recent_transactions_five': last_five,
-        'recent_transactions_ten': last_ten,
-        'recent_transactions_twenty': last_twenty,
+        'recent_transactions': recent_transacitions,
         
 
         'total_incomes': total_imcomes_spent,
