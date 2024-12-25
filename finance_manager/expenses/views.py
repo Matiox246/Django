@@ -2,15 +2,18 @@ from django.shortcuts import render
 from django.views.generic import CreateView, ListView
 from django.urls import reverse_lazy
 from django.db.models import Sum
-from .mixins import FieldMixin
+from itertools import chain
+from django.utils.timezone import now
+from datetime import timedelta
+
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from account.models import User
+from .mixins import FieldMixin
+from .models import Income, Expense, ExpenseGoal, IncomeGoal, Saved
 
-
-from .models import Income, Expense, expense_goal, income_goal
 # Create your views here.
 
 # class ExpenseListView(LoginRequiredMixin, ListView):
@@ -57,7 +60,7 @@ def monthly_expense(request, year=None, month=None):
         user = request.user if request.user.is_authenticated else None
 
     if user:
-        expenses = Expense.objects.filter(user=user)
+        expenses = Expense.objects.filter(user=user).order_by('date')
         time_period = "All time"
 
         if year and month:
@@ -67,14 +70,10 @@ def monthly_expense(request, year=None, month=None):
             time_period = "All Time"
 
         total_spent = expenses.aggregate(total=Sum('amount'))['total'] or 0
-        value = expense_goal.objects.filter(user=user).first() 
+        value = ExpenseGoal.objects.filter(user=user).first() 
         if value: 
             goal_value = value.amount
             percentage_spent = round((total_spent / goal_value) * 100)
-            if total_spent >= (goal_value * 80) / 100:
-                print("ALARM: you are close to your monthly budget!")
-        else:
-            print("No expense goal found for this user.")
 
     context = {
         'user': user,
@@ -99,7 +98,7 @@ def monthly_incomes(request, year=None, month=None):
         user = request.user if request.user.is_authenticated else None
 
     if user:
-        incomes = Income.objects.filter(user=user)
+        incomes = Income.objects.filter(user=user).order_by('date')
         time_period = "All time"
         if year and month:
             incomes = incomes.filter(date__year=year, date__month=month)
@@ -119,4 +118,33 @@ def monthly_incomes(request, year=None, month=None):
     }
     return render(request, 'expenses/income_list.html', context)
 
-    
+
+def get_save_of_month_data(user):
+    today = now().date()
+    current_month = today.month
+    last_day_of_month = today.replace(day=20) #(today.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
+
+    user_expenses = Expense.objects.filter(user=user)
+    monthly_expense = user_expenses.filter(date__month=current_month)
+    total_monthly_expenses = monthly_expense.aggregate(total=Sum('amount'))['total'] or 0
+
+    user_incomes = Income.objects.filter(user=user)
+    monthly_incomes = user_incomes.filter(date__month=current_month)
+    total_monthly_income = monthly_incomes.aggregate(total=Sum('amount'))['total'] or 0
+
+    total_saved = total_monthly_income - total_monthly_expenses
+    total_saved_percent = None
+    if total_saved > 0:
+        total_saved_percent = round(100 - ((total_monthly_expenses / total_monthly_income ) * 100), 1)
+
+    current_month_save = Saved.objects.filter(date__month=current_month)
+    if today == last_day_of_month and not current_month_save:
+        # create saved object
+        save_of_month = Saved.objects.create(amount=total_saved)
+
+    context = {
+        'total_saved':total_saved,
+        'total_saved_percent':total_saved_percent,
+    }
+    return context
+

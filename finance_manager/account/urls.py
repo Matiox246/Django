@@ -5,7 +5,7 @@
 
 from django.contrib.auth import views
 from django.urls import path
-from .views import IncomeList
+from .views import recent_transacitions, ExpenseGoalCreateView, ExpenseGoalUpdateView
 
 app_name = 'account'
 urlpatterns = [
@@ -38,5 +38,7 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('', IncomeList.as_view(), name='home'),
+    path('', recent_transacitions, name='home'),
+    path('set_goal', ExpenseGoalCreateView.as_view(), name='expense_goal_create'),
+    path('update_goal', ExpenseGoalUpdateView.as_view(), name='expense_goal_update'),
 ]

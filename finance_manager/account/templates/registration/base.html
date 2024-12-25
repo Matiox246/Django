@@ -34,9 +34,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'registration/cute_button/style.css' %}">
   <!----------------------------------------------------end buttton------------------------------------------>
+  
   <!---------------------------------------------------progress bar------------------------------------------>
-  <link rel="stylesheet" href="{% static 'registration/progress-bar/style.css' %}">
+  <link rel="stylesheet" href="{% static 'registration/circular-progress/css.css' %}">
   <!-----------------------------------------------end progress bar------------------------------------------>
+  
+  <link rel="stylesheet" href="{% static 'registration/pop_up/css.css' %}">
+  <!---------------------------------------------------end pop up link--------------------------------------->
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -57,7 +61,7 @@
         <a href="{% url 'account:home' %}" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/contact/" class="nav-link">Contact</a>
+        <a href="{% url 'contact:contact'%}" class="nav-link">Contact</a>
       </li>
     </ul>
 
@@ -143,33 +147,11 @@
           <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
         </div>
       </li>
-      <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
-      </li>
+      <!-- notification dropdown -->
+      {% block notification %}
+      {% include "registration/notification-dropdown.html" %}
+      {% endblock notification %}
+      <!--end notification -->
       <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
@@ -192,7 +174,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">{% block title %}Dashboard{% endblock title %}</h1>
+            <!--<h1 class="m-0">{% block title %}Dashboard{% endblock title %}</h1>-->
           {% comment %} </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -311,6 +293,8 @@
               </div><!-- /.card-body -->
             </div>
             <!-- /.card -->
+
+            
 
             <!-- DIRECT CHAT -->
             <div class="card direct-chat direct-chat-primary">
@@ -794,13 +778,13 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <footer class="main-footer">
+  {% comment %} <footer class="main-footer">
     <strong>Copyright &copy; 2024 <a href="#">Matin Hashemnia</a>.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 3.1.0
     </div>
-  </footer>
+  </footer> {% endcomment %}
 
  <!-- Control Sidebar -->
  <aside class="control-sidebar control-sidebar-dark">
@@ -844,5 +828,75 @@
 <script src="{% static 'registration/adminlte/dist/js/demo.js' %}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{% static 'registration/adminlte/dist/js/pages/dashboard.js' %}"></script>
+
+<script src="{% static 'registration/circular-progress/js.js' %}"></script>
+
+<script>
+  $(function () {
+    //--------------
+    //- AREA CHART -
+    //--------------
+
+    // Get context with jQuery - using jQuery's .get() method.
+    var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
+
+    var areaChartData = {
+      labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [
+        {
+          label               : 'Digital Goods',
+          backgroundColor     : 'rgba(60,141,188,0.9)',
+          borderColor         : 'rgba(60,141,188,0.8)',
+          pointRadius          : false,
+          pointColor          : '#3b8bba',
+          pointStrokeColor    : 'rgba(60,141,188,1)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(60,141,188,1)',
+          data                : [28, 48, 40, 19, 86, 27, 90]
+        },
+        {
+          label               : 'Electronics',
+          backgroundColor     : 'rgba(210, 214, 222, 1)',
+          borderColor         : 'rgba(210, 214, 222, 1)',
+          pointRadius         : false,
+          pointColor          : 'rgba(210, 214, 222, 1)',
+          pointStrokeColor    : '#c1c7d1',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(220,220,220,1)',
+          data                : [65, 59, 80, 81, 56, 55, 40]
+        },
+      ]
+    }
+
+    var areaChartOptions = {
+      maintainAspectRatio : false,
+      responsive : true,
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [{
+          gridLines : {
+            display : false,
+          }
+        }],
+        yAxes: [{
+          gridLines : {
+            display : false,
+          }
+        }]
+      }
+    }
+
+    // This will get the first returned node in the jQuery collection.
+    new Chart(areaChartCanvas, {
+      type: 'line',
+      data: areaChartData,
+      options: areaChartOptions
+    })
+  })
+</script>
+
+
 </body>
 </html>
