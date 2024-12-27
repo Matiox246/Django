@@ -1,65 +1,45 @@
 {% extends "registration/base.html" %}
 {% load static %}
-
-
-
 {% block main %}
-
-
-<div style="display:flex; gap:8px;">
-  <form id="date-filter-form">
-    <label for="date">filter month</label>
-    <input type="month" id="date-picker" name="date">
-    <button type="button" onclick="redirectToExpenses()">Filter</button>
-        
-  </form>
-  <a href="{% url 'expense_list' %}"><button>Remove filters</button></a>
-</div>
-<a href="{% url 'add_expense' %}"><button>add</button></a>
-
-
-
-
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
-
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	
-	<link rel="stylesheet" href="{% static 'registration/incomes_table/css/style.css' %}">
-
-	</head>
-	<body>
-	<section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-6 text-center mb-5">
-					<h2 class="heading-section">Expenses</h2>
-				</div>
+<div style="display: flex; justify-content:space-between; flex-direction: row-reverse;">
+			<a href="{%url 'add_expense' %}"><button class="btn btn-block btn-primary">Add Expense</button></a>
+			<div style="display:flex; gap:8px;">
+				<form id="date-filter-form">
+					<label>Month:</label>
+					<div class="input-group date" id="reservationdatetime" data-target-input="nearest">
+						<input type="month" class="-group-append" id="date-picker" name="date" />
+						<div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
+							<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+						</div>
+						<button class="ml-3" type="button" onclick="redirectToExpenses()">Filter</button>
+					</div>
+				</form>
 			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<div class="table-wrap">
-						<table class="table">
-						  <thead class="thead-primary">
-						    <tr>
-						      <th>amount</th>
-						      <th>category</th>
-						      <th>date</th>
-						      <th>reason</th>
-						    </tr>
-						  </thead>
-						  <tbody>
-						    {% for expense in expenses %}
+		</div>
+		<div class="mt-5">
+			<h5>Total spent:<span> {{total_spent}}$</span></h3>
+			<p>Time period:<span> {{time_period}}</span></h3>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="table-wrap">
+					<table class="table">
+						<thead class="thead-primary">
+						<tr>
+							<th>amount</th>
+							<th>category</th>
+							<th>date</th>
+							<th>reason</th>
+						</tr>
+						</thead>
+						<tbody>
+						{% for expense in expenses %}
                             <tr>
-                                <th scope="row">{{expense.amount}}$</th>
+                            	<th scope="row">{{expense.amount}}$</th>
                                 <td>{{expense.category}}</td>
                                 <td>{{expense.date}}</td>
                                 <td>{{expense.description}}</td>
-                              </tr>
+                            </tr>
                             {% endfor %}
 						  </tbody>
 						</table>
@@ -69,13 +49,7 @@
 		</div>
 	</section>
 
-	<script src="{% static 'registration/incomes_table/js/jquery.min.js' %}"></script>
-  <script src="{% static 'registration/incomes_table/js/popper.js' %}"></script>
-  <script src="{% static 'registration/incomes_table/js/bootstrap.min.js' %}"></script>
-  <script src="{% static 'registration/incomes_table/js/main.js' %}"></script>
 
-  <script src="https://kit.fontawesome.com/cab1fd28d4.js" crossorigin="anonymous"></script>
-  {% comment %} filter month js {% endcomment %}
   <script>
     function redirectToExpenses(){
         const datePicker = document.getElementById('date-picker');
@@ -87,9 +61,4 @@
         }
     }
 </script>
-
-
-	</body>
-</html>
-
 {% endblock main %}

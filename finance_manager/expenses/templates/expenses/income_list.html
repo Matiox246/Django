@@ -4,43 +4,26 @@
 
 {% endblock title %}
 {% block main %}
-<!doctype html>
-<html lang="en">
-  <head>
-  	<title>Incomes</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
-
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	
-	<link rel="stylesheet" href="{% static 'registration/incomes_table/css/style.css' %}">
-	</head>
-	<body>
 		<div style="display: flex; justify-content:space-between; flex-direction: row-reverse;">
-			<a href="{%url 'add_income' %}"><button>ADD INCOME</button></a>
+			<a  href="{%url 'add_income' %}"><button class="btn btn-block btn-primary">Add Income</button></a>
 			<div style="display:flex; gap:8px;">
 				<form id="date-filter-form">
-				<label for="date">filter month</label>
-				<input type="month" id="date-picker" name="date">
-				<button type="button" onclick="redirectToExpenses()">Filter</button>
+					<label>Month:</label>
+					<div class="input-group date" id="reservationdatetime" data-target-input="nearest">
+						<input type="month" class="-group-append" id="date-picker" name="date" />
+						<div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
+							<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+						</div>
+						<button class="ml-3" type="button" onclick="redirectToExpenses()">Filter</button>
+					</div>
 				</form>
-				<a href="{% url 'income_list' %}"><button>Remove filters</button></a>
 			</div>
 		</div>
-		<div>
-			<h3>Total spent:<span> {{total_spent}}$</span></h3>
-			<h3>Time period:<span> {{time_period}}</span></h3>
-			<a href=""><button>edit</button></a>
-
+		<div class="mt-5">
+			<h5>Total spent:<span> {{total_spent}}$</span></h3>
+			<p>Time period:<span> {{time_period}}</span></h3>
 		</div>
-	<section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-6 text-center mb-5">
-					<h2 class="heading-section">Incomes</h2>
-				</div>
+	
 			</div>
 			<div class="row">
 				<div class="col-md-12">
@@ -48,10 +31,10 @@
 						<table class="table">
 						  <thead class="thead-primary">
 						    <tr>
-						      <th>#</th>
-						      <th>First Name</th>
-						      <th>Last Name</th>
-						      <th>Email Address</th>
+								<th>amount</th>
+								<th>category</th>
+								<th>date</th>
+								<th>reason</th>
 						    </tr>
 						  </thead>
 						  <tbody>
@@ -60,7 +43,7 @@
                                 <th scope="row">{{income.amount}}$</th>
                                 <td>{{income.category}}</td>
                                 <td>{{income.date}}</td>
-                                <td>{{income.user.email}}</td>
+                                <td>{{income.description}}</td>
                               </tr>
                             {% endfor %}
 						  </tbody>
@@ -70,13 +53,6 @@
 			</div>
 		</div>
 	</section>
-
-	<script src="{% static 'registration/incomes_table/js/jquery.min.js' %}"></script>
-  <script src="{% static 'registration/incomes_table/js/popper.js' %}"></script>
-  <script src="{% static 'registration/incomes_table/js/bootstrap.min.js' %}"></script>
-  <script src="{% static 'registration/incomes_table/js/main.js' %}"></script>
-
-  <script src="https://kit.fontawesome.com/cab1fd28d4.js" crossorigin="anonymous"></script>
 
   <script>
     function redirectToExpenses() {
@@ -89,8 +65,7 @@
         }
     }
 </script>
-</body>
-</html>
+
 
 
 {% endblock main %}

@@ -53,6 +53,8 @@ class Saved(models.Model):
     amount = models.IntegerField()
     date = models.DateField(auto_now_add=True, null=True)
     user = models.ForeignKey(User , on_delete=models.CASCADE, null=True)
+    percentage = models.IntegerField("percentage",null=True)
+
     
     def __str__(self):
         return f"{self.amount} in {self.date.month}"

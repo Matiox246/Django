@@ -41,6 +41,9 @@
   
   <link rel="stylesheet" href="{% static 'registration/pop_up/css.css' %}">
   <!---------------------------------------------------end pop up link--------------------------------------->
+
+
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -897,6 +900,23 @@
   })
 </script>
 
+
+<script>
+  function getURLParameter(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  }
+
+  const count = getURLParameter('count');
+
+  document.querySelectorAll('.pagination .page-item a').forEach(link => {
+    if (link.href.includes(`count=${count}`)) {
+      link.parentElement.classList.add('active');
+    } else {
+      link.parentElement.classList.remove('active');
+    }
+  });
+</script>
 
 </body>
 </html>

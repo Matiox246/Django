@@ -45,6 +45,7 @@ def recent_transacitions(request):
             transaction['transaction_type']= 'Income'
         else:
             transaction['transaction_type'] = 'Expense'
+
     # sort by date created
     combined_transactions.sort(key=lambda x: x['date'], reverse=True)
 
@@ -71,31 +72,26 @@ def recent_transacitions(request):
 
     # display the precentage used of the set target value 
     value = monthly_expense_goal
+    color = ""
     if value: 
         goal_value = value.amount
         percentage_spent = 100 - (round((total_expenses_spent / goal_value) * 100))
-        if total_expenses_spent <= (goal_value * 20) / 100:
-            print("ALARM: you are close to your monthly budget!")
-    else:
-        percentage_spent = 100
-        color = "blue"
-    # change progress color in diffrent value
-    if 100 >= percentage_spent > 70:
-        color = '#2cba00'
-    elif 70 > percentage_spent > 50:
-        color = '#a3ff00'
-    elif 50 > percentage_spent > 30:
-        color = '#fff400'
-    elif 30 > percentage_spent > 10:
-        color = '#ffa700'
-    elif 10 > percentage_spent >= 0:
-        color = '#ff0000'
+        if 100 >= percentage_spent > 70:
+            color = '#2cba00'
+        elif 70 >= percentage_spent > 50:
+            color = '#a3ff00'
+        elif 50 >= percentage_spent > 30:
+            color = '#fff400'
+        elif 30 >= percentage_spent > 10:
+            color = '#ffa700'
+        elif 10 >= percentage_spent > 0:
+            color = '#ff0000'
         
     context_alert = get_alert_data(request.user)
     context_saved = get_save_of_month_data(request.user)
 
     context = {
-        'recent_transactions': recent_transacitions,
+        'recent_transactions': recent_transactions,
         
 
         'total_incomes': total_imcomes_spent,

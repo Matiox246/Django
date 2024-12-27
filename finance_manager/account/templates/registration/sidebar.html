@@ -34,32 +34,58 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-dollar"></i>
               <p>
-                Dashboard
-                <i class="right fas fa-angle-left"></i>
+                Transactions
+                <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/incomes/" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Incomes</p>
+                <a href="{% url 'expense_list'%}" class="nav-link">
+                  <i class="nav-icon fas fa-arrow-up" style="rotate:45deg;color:red;"></i>
+                  <p>
+                    Expenses
+                    <span class="badge badge-info right"></span>
+                  </p>
                 </a>
-              </li>
+              </li>      
               <li class="nav-item">
-                <a href="/expenses" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Expenses</p>
+                <a href="{% url 'income_list' %}" class="nav-link">
+                  <i class="nav-icon fas fa-arrow-down" style="rotate:45deg;color:lightgreen;"></i>
+                  <p>
+                    Incomes
+                    <span class="badge badge-info right"></span>
+                  </p>
                 </a>
-              </li>
-        </ul>
+              </li>    
+            </ul>
+          </li>  
+          <li class="nav-item">
+            <a href="{% url 'alerts'%}" class="nav-link">
+              <i class="nav-icon fas fa-bell"></i>
+              <p>
+                Notifications
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'alerts'%}" class="nav-link">
+              <i class="nav-icon fas fa-calendar"></i>
+              <p>
+                Calendar
+              </p>
+            </a>
+          </li>
+        <ul>
       </nav>
       <!-- /.sidebar-menu -->
+      <div class="container d-flex flex-column-reverse " style="height:52%;">
+        <button class="btn btn-block btn-default" >Upgrade To Premum</button>
+      </div>
     </div>
     <!-- /.sidebar -->
+    
   </aside>

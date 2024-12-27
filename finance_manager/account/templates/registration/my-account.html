@@ -1,0 +1,10 @@
+{% block main %}
+
+WELCOME {{user}}
+{% if is_premum_user %}
+<h3>you are premum user until {{premum_user}}</h3>
+{% else %}
+<h3>you are using the free plan</h3>
+{% endif %}
+
+{% endblock main %}

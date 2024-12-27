@@ -121,8 +121,10 @@ def monthly_incomes(request, year=None, month=None):
 
 def get_save_of_month_data(user):
     today = now().date()
+    current_year = today.year
     current_month = today.month
-    last_day_of_month = today.replace(day=20) #(today.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
+    last_month = current_month - 2
+    last_day_of_month = (today.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
 
     user_expenses = Expense.objects.filter(user=user)
     monthly_expense = user_expenses.filter(date__month=current_month)
@@ -140,11 +142,21 @@ def get_save_of_month_data(user):
     current_month_save = Saved.objects.filter(date__month=current_month)
     if today == last_day_of_month and not current_month_save:
         # create saved object
-        save_of_month = Saved.objects.create(amount=total_saved)
+        save_month_create = Saved.objects.create(user=user,
+                                                    amount=total_saved,
+                                                    date__month=current_month,
+                                                    date__year=current_year,
+                                                    percentage=total_saved_percent)
+        
+    saved_of_month = Saved.objects.filter(user=user,
+                                           date__month=current_month,
+                                           date__year = current_year).first()
+    
+    saved_of_last_month = Saved.objects.filter(user=user, date__month=last_month,date__year=current_year).first()
 
     context = {
         'total_saved':total_saved,
         'total_saved_percent':total_saved_percent,
+        'saved_of_month': saved_of_month,
     }
     return context
-

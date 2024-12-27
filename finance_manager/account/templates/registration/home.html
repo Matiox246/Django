@@ -119,7 +119,7 @@
             <!-- /.card -->
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Responsive Hover Table</h3>
+                <h3 class="card-title">Recent Transactions</h3>
                 <div class="card-tools">
                   <div class="row" style="display:flex;gap:8px;">
 
@@ -135,9 +135,9 @@
                     </div>
                     <nav aria-label="..." >
                       <ul class="pagination pagination-sm">
-                        <li class="page-item" href="window.location.href='?count=5'"><a class="page-link" tabindex="-1">5</a></li>
-                        <li class="page-item" href="window.location.href='?count=10'"><a class="page-link">10</a></li>
-                        <li class="page-item" href="window.location.href='?count='"><a class="page-link">20</a></li>
+                        <li class="page-item "><a class="page-link" href="?count=5" onclick="setActive(this)" tabindex="-1">5</a></li>
+                        <li class="page-item"><a class="page-link" href="?count=10" onclick="setActive(this)">10</a></li>
+                        <li class="page-item"><a class="page-link" href="?count=20" onclick="setActive(this)">20</a></li>
                       </ul>
                     </nav>
                   </div>
@@ -155,7 +155,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {% for recent in recent_transactions_five %}
+                    {% for recent in recent_transactions %}
                     <tr>
                       <td><span class="color-related-to-transaction-type" style="color:
                         {% if recent.transaction_type == 'Income' %}
@@ -339,9 +339,9 @@
                 </p>
                 <p class="d-flex flex-column text-right">
                   <span class="font-weight-bold">
-                    <i class="ion ion-android-arrow-up text-success"></i> 12%
+                    <i class="ion ion-android-arrow-up text-success"></i> {{saved_of_month.percentage}}%
                   </span>
-                  <span class="text-muted">SAVED / GOAL</span>
+                  <span class="text-muted">SAVED / INCOME</span>
                 </p>
               </div>
               <!-- /.d-flex -->
@@ -379,10 +379,4 @@
     </div>
     <!-- /.container-fluid -->
   </div>
-WELCOME {{user}}
-{% if is_premum_user %}
-<h3>you are premum user until {{premum_user}}</h3>
-{% else %}
-<h3>you are using the free plan</h3>
-{% endif %}
 {% endblock main %}
